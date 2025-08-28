@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cerberus - ResQTerra Initiative</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #000;
+            color: #fff;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 70px;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 400;
+            transition: all 0.3s ease;
+            opacity: 0.8;
+        }
+
+        .nav-links a:hover {
+            opacity: 1;
+            transform: translateY(-2px);
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            background: #000;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><circle cx="500" cy="200" r="100" fill="rgba(255,255,255,0.05)"/><circle cx="300" cy="400" r="150" fill="rgba(255,255,255,0.03)"/><circle cx="700" cy="600" r="120" fill="rgba(255,255,255,0.05)"/></svg>') no-repeat center;
+            background-size: cover;
+            animation: float 20s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(2deg); }
+        }
+
+        .hero-content {
+            text-align: center;
+            z-index: 2;
+            max-width: 800px;
+            padding: 0 2rem;
+        }
+
+        .hero h1 {
+            font-size: clamp(3rem, 8vw, 6rem);
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: #fff;
+            animation: slideInUp 1s ease-out;
+        }
+
+        .hero .subtitle {
+            font-size: clamp(1.2rem, 3vw, 1.8rem);
+            margin-bottom: 2rem;
+            opacity: 0.9;
+            animation: slideInUp 1s ease-out 0.2s both;
+        }
+
+        .hero .description {
+            font-size: 1.1rem;
+            margin-bottom: 3rem;
+            opacity: 0.7;
+            line-height: 1.8;
+            animation: slideInUp 1s ease-out 0.4s both;
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 1rem 2.5rem;
+            background: #fff;
+            color: #000;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(255, 255, 255, 0.1);
+            animation: slideInUp 1s ease-out 0.6s both;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 40px rgba(255, 255, 255, 0.2);
+            background: #f0f0f0;
+        }
+
+        /* Features Section */
+        .features {
+            padding: 8rem 2rem;
+            background: #111;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            margin-bottom: 4rem;
+            color: #fff;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 3rem;
+            margin-bottom: 6rem;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 3rem 2rem;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: #fff;
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .feature-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(255, 255, 255, 0.1);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            display: block;
+        }
+
+        .feature-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #fff;
+        }
+
+        .feature-card p {
+            opacity: 0.8;
+            line-height: 1.8;
+        }
+
+        /* Architecture Section */
+        .architecture {
+            padding: 8rem 2rem;
+            background: #111;
+        }
+
+        .arch-content {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .arch-description {
+            font-size: 1.2rem;
+            opacity: 0.8;
+            max-width: 800px;
+            margin: 0 auto 3rem;
+            line-height: 1.8;
+        }
+
+        /* Mermaid Diagram Container */
+        .mermaid-container {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            overflow-x: auto;
+        }
+
+        .mermaid {
+            background: transparent !important;
+        }
+
+        /* Override mermaid default styles for black and white theme */
+        .mermaid .node rect,
+        .mermaid .node circle,
+        .mermaid .node ellipse,
+        .mermaid .node polygon {
+            fill: rgba(255, 255, 255, 0.1) !important;
+            stroke: #fff !important;
+            stroke-width: 1px !important;
+        }
+
+        .mermaid .nodeLabel {
+            color: #fff !important;
+            fill: #fff !important;
+        }
+
+        .mermaid .edgeLabel {
+            color: #fff !important;
+            fill: #fff !important;
+        }
+
+        .mermaid .edgePath path {
+            stroke: #fff !important;
+            stroke-width: 1px !important;
+        }
+
+        .mermaid .cluster rect {
+            fill: rgba(255, 255, 255, 0.05) !important;
+            stroke: rgba(255, 255, 255, 0.3) !important;
+        }
+
+        .mermaid .cluster .label {
+            color: #fff !important;
+            fill: #fff !important;
+        }
+
+        /* Footer */
+        footer {
+            padding: 4rem 2rem;
+            background: #000;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .footer-content p {
+            opacity: 0.6;
+            margin-bottom: 1rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .layer-components {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+
+        /* Scroll animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <nav id="navbar">
+        <div class="nav-container">
+            <div class="logo">Project Cerberus</div>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#features">Features</a></li>
+                <li><a href="#architecture">Architecture</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <h1>Cerberus</h1>
+            <p class="subtitle">A ResQTerra Initiative</p>
+            <p class="description">An adaptive multi-modal communication system for critical drone operations. Cerberus acts as an autonomous guardian, ensuring resilient and secure connectivity in any environment through intelligent switching between 5G, private mesh networks, and satellite links.</p>
+            <a href="#features" class="cta-button">Explore the System</a>
+        </div>
+    </section>
+
+    <section id="features" class="features">
+        <div class="container">
+            <h2 class="section-title fade-in">Core Capabilities</h2>
+            <div class="features-grid">
+                <div class="feature-card fade-in">
+                    <span class="feature-icon">🧠</span>
+                    <h3>Dynamic Comms Manager</h3>
+                    <p>An intelligent core that dynamically selects the optimal communication mode based on real-time analysis of security, connectivity, and mission requirements.</p>
+                </div>
+                <div class="feature-card fade-in">
+                    <span class="feature-icon">🛡️</span>
+                    <h3>Hardened 5G Security</h3>
+                    <p>Secure 5G stack featuring IMSI privacy, base station authentication, double encryption, and traffic obfuscation to protect operational patterns.</p>
+                </div>
+                <div class="feature-card fade-in">
+                    <span class="feature-icon">🌐</span>
+                    <h3>Enhanced Mesh Network</h3>
+                    <p>Private, decentralized communication network with Onion Routing for message privacy and Proof-of-Relay protocol for secure node verification.</p>
+                </div>
+                <div class="feature-card fade-in">
+                    <span class="feature-icon">🛰️</span>
+                    <h3>Multi-Modal Resiliency</h3>
+                    <p>Integrates satellite and emergency beacon modules as fallback options, maintaining communication during total network blackouts.</p>
+                </div>
+                <div class="feature-card fade-in">
+                    <span class="feature-icon">🔍</span>
+                    <h3>Unified Threat Detection</h3>
+                    <p>Centralized framework consolidating threat intelligence from all channels to provide holistic security awareness and automated responses.</p>
+                </div>
+                <div class="feature-card fade-in">
+                    <span class="feature-icon">🤖</span>
+                    <h3>Autonomous Recovery</h3>
+                    <p>Advanced failsafe protocols detecting communication loss and executing autonomous actions like emergency beacon activation or Return-to-Launch.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="architecture" class="architecture">
+        <div class="container">
+            <h2 class="section-title fade-in">System Architecture</h2>
+            <div class="arch-content fade-in">
+                <p class="arch-description">
+                    The Cerberus architecture is designed to be highly modular and layered. The CommunicationManager acts as the central orchestrator, making high-level decisions and managing various communication and security modules. This separation ensures resilience and adaptability, allowing for independent operation and graceful degradation of capabilities.
+                </p>
+            </div>
+            <div class="mermaid-container fade-in">
+                <div class="mermaid">
+                    graph TD
+                        subgraph " "
+                        %% Top Level: Simulation Entry Points
+                        subgraph "Application & Simulation Layer"
+                            direction LR
+                            Runner["<b>run_simulations.sh</b><br><i>Interactive Runner</i>"]
+                            Sim1["main_communication_manager_simulation.py"]
+                            Sim2["main_mesh_simulation.py"]
+                            Sim3["main_5g_simulation.py"]
+                            Sim4["main_advanced_communication_simulation.py"]
+                            Sim5["main_testing_operationalization_simulation.py"]
+                        end
+
+                        %% Core Orchestration Layer
+                        subgraph "Orchestration & Decision Layer"
+                            CommManager["<b>CommunicationManager</b><br><i>(communication_manager.py)</i><br>The central brain; selects comms mode."]
+                        end
+
+                        %% Communication Modes
+                        subgraph "Communication Modes (Managed by CommunicationManager)"
+                            direction LR
+                            
+                            %% 5G Module and its specific dependencies
+                            subgraph "Secure 5G Stack"
+                                Secure5G["<b>Secure 5G Module</b><br><i>(secure_5g_module.py)</i>"]
+                                subgraph G5Security["5G Security Components (security/)"]
+                                    direction TB
+                                    IMSI["IMSI Privacy"]
+                                    BSAuth["Base Station Auth"]
+                                    CarrierVal["Carrier Validation"]
+                                    DoubleEnc["Double Encryption"]
+                                    TrafficOb["Traffic Obfuscation"]
+                                end
+                                Secure5G -. Uses .-> G5Security
+                            end
+
+                            %% Mesh Module conceptual group
+                            subgraph "Enhanced Mesh Stack (BitChat-Inspired)"
+                                MeshModule["<b>Enhanced Mesh Module</b><br><i>(Conceptual)</i>"]
+                                subgraph MeshComponents["Mesh Security & Routing"]
+                                    direction TB
+                                    Onion["Onion Routing<br><i>(onion_routing.py)</i>"]
+                                    PoR["Proof of Relay<br><i>(proof_of_relay.py)</i>"]
+                                    RPM["Relay Path Manager<br><i>(relay_path_manager.py)</i>"]
+                                end
+                                MeshModule -. Composed of .-> MeshComponents
+                            end
+
+                            %% Advanced/Fallback Modules
+                            subgraph "Advanced & Emergency Modules"
+                                SatComm["<b>Satellite Module</b><br><i>(satellite_communication.py)</i>"]
+                                Beacon["<b>Emergency Beacon</b><br><i>(emergency_beacon.py)</i>"]
+                            end
+                        end
+
+                        %% System-Wide Services (Consulted by Orchestration Layer)
+                        subgraph "System-Wide Services & Protocols"
+                            direction LR
+
+                            subgraph "Unified Threat Detection (security/)"
+                                UTD["<b>UnifiedThreatDetector</b>"]
+                                G5Detector["G5ThreatDetector"]
+                                MeshDetector["Mesh Anomaly Detector<br><i>(Conceptual)</i>"]
+                                UTD -- Consolidates --> G5Detector
+                                UTD -- Consolidates --> MeshDetector
+                            end
+
+                            subgraph "Autonomous Protocols (protocols/)"
+                                AutoRecovery["<b>Autonomous Recovery</b><br>Decision Tree"]
+                                Blackout["<b>Communication Blackout</b><br>Detection"]
+                                PerfOpt["<b>Performance Optimization</b><br>Traffic Shaping"]
+                            end
+                        end
+
+                        %% External Frameworks for Testing and Ops
+                        subgraph "Testing & Operationalization Frameworks"
+                            direction LR
+                            Testing["<b>Security Testing</b><br><i>(testing/security_testing_framework.py)</i>"]
+                            Operational["<b>Operational Procedures</b><br><i>(operational/operational_procedures.py)</i>"]
+                        end
+                        end
+
+                        %% Defining Relationships between all components
+
+                        %% Simulations trigger core components
+                        Runner --> Sim1 & Sim2 & Sim3 & Sim4 & Sim5
+                        Sim1 --> CommManager
+                        Sim2 --> MeshModule
+                        Sim3 --> Secure5G & G5Detector
+                        Sim4 --> UTD & AutoRecovery & Blackout & SatComm & Beacon
+                        Sim5 --> Testing & Blackout & AutoRecovery
+
+                        %% Manager controls all communication modes
+                        CommManager -- Manages & Chooses --> Secure5G
+                        CommManager -- Manages & Chooses --> MeshModule
+                        CommManager -- Manages & Chooses --> SatComm
+                        CommManager -- Manages & Chooses --> Beacon
+
+                        %% Manager uses system-wide services
+                        CommManager -- Consults --> UTD
+                        CommManager -- Triggers --> AutoRecovery
+                        CommManager -- Uses --> PerfOpt
+
+                        %% Protocol interactions
+                        AutoRecovery -- Uses Status from --> Blackout
+                        Blackout -- Activates on Failure --> Beacon
+
+                        %% Testing Framework acts on the system
+                        Testing -- Adversarially Tests --> Secure5G & MeshModule
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer id="contact">
+        <div class="footer-content">
+            <p>&copy; 2025 ResQTerra Initiative. Cerberus.</p>
+            <p>Advancing drone communication security through intelligent multi-modal systems.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/10.6.1/mermaid.min.js"></script>
+    <script>
+        // Initialize Mermaid
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'dark',
+            themeVariables: {
+                background: '#000',
+                primaryColor: '#fff',
+                primaryTextColor: '#fff',
+                primaryBorderColor: '#fff',
+                lineColor: '#fff',
+                secondaryColor: '#333',
+                tertiaryColor: '#555'
+            }
+        });
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Navbar background on scroll
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 100) {
+                navbar.style.background = 'rgba(0, 0, 0, 0.95)';
+            } else {
+                navbar.style.background = 'rgba(0, 0, 0, 0.8)';
+            }
+        });
+
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        // Observe all elements with fade-in class
+        document.querySelectorAll('.fade-in').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Add stagger delay to feature cards
+        document.querySelectorAll('.feature-card').forEach((card, index) => {
+            card.style.transitionDelay = `${index * 0.1}s`;
+        });
+
+        // Component hover effects
+        document.querySelectorAll('.component').forEach(component => {
+            component.addEventListener('mouseenter', () => {
+                component.style.boxShadow = '0 5px 20px rgba(255, 255, 255, 0.2)';
+            });
+            
+            component.addEventListener('mouseleave', () => {
+                component.style.boxShadow = 'none';
+            });
+        });
+
+        // Parallax effect for hero background
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const rate = scrolled * -0.3;
+            const hero = document.querySelector('.hero');
+            if (hero && scrolled < window.innerHeight) {
+                hero.style.transform = `translateY(${rate}px)`;
+            }
+        });
+    </script>
+</body>
+</html>
